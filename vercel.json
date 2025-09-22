@@ -6,22 +6,18 @@
       "maxDuration": 30
     }
   },
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
     },
     {
-      "src": "/rota.html",
-      "dest": "/public/rota.html"
+      "source": "/",
+      "destination": "/api/index.js"
     },
     {
-      "src": "/",
-      "dest": "/api/index.js"
-    },
-    {
-      "src": "/merged-rota",
-      "dest": "/api/index.js"
+      "source": "/merged-rota",
+      "destination": "/api/index.js"
     }
   ],
   "env": {
