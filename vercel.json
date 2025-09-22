@@ -1,16 +1,11 @@
 {
   "version": 2,
   "name": "skylight-merged-rota",
-  "builds": [
-    {
-      "src": "api/*.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "public/**/*",
-      "use": "@vercel/static"
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 30
     }
-  ],
+  },
   "routes": [
     {
       "src": "/api/(.*)",
@@ -29,11 +24,6 @@
       "dest": "/api/index.js"
     }
   ],
-  "functions": {
-    "api/*.js": {
-      "maxDuration": 30
-    }
-  },
   "env": {
     "NODE_ENV": "production"
   }
