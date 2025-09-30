@@ -15,11 +15,11 @@
       "destination": "/api/$1"
     },
     {
-      "source": "/",
+      "source": "/merged-rota",
       "destination": "/api/index.js"
     },
     {
-      "source": "/merged-rota",
+      "source": "/(.*)",
       "destination": "/api/index.js"
     }
   ],

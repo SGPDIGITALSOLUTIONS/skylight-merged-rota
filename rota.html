@@ -132,6 +132,21 @@
             transition: background-color 0.2s;
         }
 
+        td[data-status="Running"] {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        td[data-status="In Progress"] {
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        td[data-status="Recruiting"] {
+            color: #f1c40f;
+            font-weight: bold;
+        }
+
         tr:hover td {
             background-color: #f8f9fa;
         }
@@ -281,7 +296,11 @@
                         <tbody>
                             ${data.map(row => `
                                 <tr>
-                                    ${headers.map(header => `<td>${row[header] || ''}</td>`).join('')}
+                                    ${headers.map(header => 
+                                        header === 'Status' 
+                                            ? `<td data-status="${row[header]}">${row[header]}</td>`
+                                            : `<td>${row[header] || ''}</td>`
+                                    ).join('')}
                                 </tr>
                             `).join('')}
                         </tbody>

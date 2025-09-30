@@ -1,5 +1,22 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const fs = require('fs');
+const path = require('path');
+
+/**
+ * Serve static HTML file
+ */
+async function serveHTML(res) {
+    try {
+        const htmlPath = path.join(process.cwd(), 'rota.html');
+        const html = await fs.promises.readFile(htmlPath, 'utf8');
+        res.setHeader('Content-Type', 'text/html');
+        return res.status(200).send(html);
+    } catch (error) {
+        console.error('Error serving HTML:', error);
+        return res.status(500).send('Error loading interface');
+    }
+}
 
 /**
  * Fetch rota table from a given URL and return as array of objects
@@ -89,13 +106,37 @@ async function mergeRotas() {
         index === self.findIndex(t => JSON.stringify(t) === JSON.stringify(item))
     );
     
-    return uniqueRotas;
+    // Filter out Shift Instructions and add running status
+    const rotasWithStatus = uniqueRotas.map(rota => {
+        // Create a new object without the Shift Instructions column
+        const { ['Shift Instructions']: removed, ...rotaWithoutShiftInstructions } = rota;
+        const volunteers = rota['Volunteers Confirmed'] || '';
+        const hasOptometrist = /optometrist/i.test(volunteers);
+        const hasAssistant = /assistant/i.test(volunteers);
+        
+        let status;
+        if (hasOptometrist && hasAssistant) {
+            status = 'Running';
+        } else if (hasOptometrist || hasAssistant) {
+            status = 'In Progress';
+        } else {
+            status = 'Recruiting';
+        }
+        
+        return {
+            ...rotaWithoutShiftInstructions,
+            'Status': status
+        };
+    });
+    
+    return rotasWithStatus;
 }
 
-/**
- * Main API handler for Vercel
- */
-module.exports = async (req, res) => {
+const express = require('express');
+const app = express();
+
+// Create handler function that works both with Express and Vercel
+const handler = async (req, res) => {
     // Enable CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -108,8 +149,15 @@ module.exports = async (req, res) => {
     const { pathname } = new URL(req.url, `http://${req.headers.host}`);
     
     try {
-        if (pathname === '/' || pathname === '/api') {
-            console.log("🏠 Home page accessed");
+        // Serve HTML interface for root and rota.html
+        if (pathname === '/' || pathname === '/rota.html') {
+            console.log("🏠 Serving HTML interface");
+            return await serveHTML(res);
+        }
+
+        // API status endpoint
+        if (pathname === '/api') {
+            console.log("ℹ️ API status requested");
             return res.status(200).json({
                 message: "Rota Merge API is Running!",
                 endpoints: {
@@ -148,3 +196,18 @@ module.exports = async (req, res) => {
         });
     }
 };
+
+// Use the handler for both Vercel and Express
+if (process.env.VERCEL) {
+    // Export for Vercel
+    module.exports = handler;
+} else {
+    // Set up Express routes for local development
+    app.use(handler);
+    
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+        console.log(`🚀 Server running at http://localhost:${PORT}`);
+        console.log(`📱 View the rota at http://localhost:${PORT}/rota.html`);
+    });
+}

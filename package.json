@@ -4,7 +4,7 @@
   "description": "Vercel-hosted rota merger for VCHP Skylight system",
   "main": "index.js",
   "scripts": {
-    "dev": "node -e \"console.log('Use: vercel dev'); console.log('Or visit: https://your-app.vercel.app')\"",
+    "dev": "node api/index.js",
     "build": "echo 'No build step required'",
     "start": "node api/index.js"
   },
