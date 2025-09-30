@@ -5,25 +5,14 @@
       "maxDuration": 30
     }
   },
-  "outputDirectory": ".",
-  "buildCommand": null,
-  "devCommand": null,
-  "installCommand": "npm install",
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/(.*)",
-      "destination": "/api/$1"
+      "src": "/api/merged-rota",
+      "dest": "/api/merged-rota"
     },
     {
-      "source": "/merged-rota",
-      "destination": "/api/index.js"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/api/index.js"
+      "src": "/(.*)",
+      "dest": "/api/index"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
