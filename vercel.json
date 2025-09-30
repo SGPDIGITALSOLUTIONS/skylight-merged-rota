@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "name": "skylight-merged-rota",
   "functions": {
     "api/*.js": {
       "maxDuration": 30
     }
   },
+  "outputDirectory": ".",
+  "buildCommand": false,
+  "devCommand": false,
+  "installCommand": "npm install",
   "rewrites": [
     {
       "source": "/api/(.*)",
