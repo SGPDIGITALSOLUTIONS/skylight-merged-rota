@@ -4,17 +4,5 @@
     "api/*.js": {
       "maxDuration": 30
     }
-  },
-  "buildCommand": false,
-  "outputDirectory": ".",
-  "routes": [
-    {
-      "src": "/api/merged-rota",
-      "dest": "/api/merged-rota"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/api/index"
-    }
-  ]
+  }
 }

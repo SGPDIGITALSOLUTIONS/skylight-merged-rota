@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node api/index.js",
-    "build": "echo 'No build step required'",
-    "vercel-build": "echo 'No build step required'",
+    "build": "mkdir public && cp rota.html public/index.html",
     "start": "node api/index.js"
   },
   "dependencies": {
