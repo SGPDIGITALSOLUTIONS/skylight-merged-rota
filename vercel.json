@@ -6,8 +6,8 @@
     }
   },
   "outputDirectory": ".",
-  "buildCommand": false,
-  "devCommand": false,
+  "buildCommand": null,
+  "devCommand": null,
   "installCommand": "npm install",
   "rewrites": [
     {
